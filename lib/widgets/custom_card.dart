@@ -19,7 +19,7 @@ class custom_card extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // Section Title
+        
         Text(
           scetionTitle,
           style: const TextStyle(
@@ -31,7 +31,7 @@ class custom_card extends StatelessWidget {
         ),
         const SizedBox(height: 30),
 
-        // Content Card
+      
         SizedBox(
           width: 900,
           child: Card(
@@ -46,7 +46,7 @@ class custom_card extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Left side: Section image
+                
                   ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: Image.asset(
@@ -58,7 +58,6 @@ class custom_card extends StatelessWidget {
                   ),
                   const SizedBox(width: 30),
 
-                  // Right side: Subtitle + content/skills
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,7 +72,6 @@ class custom_card extends StatelessWidget {
                         ),
                         const SizedBox(height: 20),
 
-                        // If normal content exists → show text
                         if (content.isNotEmpty)
                           Text(
                             content,
@@ -85,7 +83,7 @@ class custom_card extends StatelessWidget {
                             ),
                           ),
 
-                        // If no content → show skills list
+                   
                         if (content.isEmpty)
                           Wrap(
                             spacing: 12,
