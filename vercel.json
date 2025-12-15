@@ -1,6 +1,7 @@
 {
-  "buildCommand": "flutter build web --release",
+  "buildCommand": "bash build.sh",
   "outputDirectory": "build/web",
+  "installCommand": "echo 'Skipping default install'",
   "framework": null,
   "routes": [
     { "handle": "filesystem" },
