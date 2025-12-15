@@ -1,0 +1,26 @@
+# Flutter/Dart related
+.dart_tool/
+.packages
+.pub/
+build/
+!build/web/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Others
+.git/
+.gitignore
+README.md
+analysis_options.yaml
+pubspec.lock
+
+# Platform folders
+android/
+ios/
+linux/
+macos/
+windows/
+test/
