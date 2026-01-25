@@ -66,6 +66,11 @@ flutter:
     - assets/images/skills/
     - assets/images/certifcates/
     - assets/images/social/
+    - assets/images/projects/
+    - assets/images/projects/notes/
+    - assets/images/projects/pos/
+    - assets/images/projects/ht/
+    - assets/images/projects/ricky/
 
 
 
