@@ -10,10 +10,12 @@ class ScrollToTopButton extends StatefulWidget {
 }
 
 class _ScrollToTopButtonState extends State<ScrollToTopButton>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   bool _isVisible = false;
   late AnimationController _controller;
+  late AnimationController _pulseController;
   late Animation<double> _scaleAnimation;
+  late Animation<double> _pulseAnimation;
 
   @override
   void initState() {
@@ -26,6 +28,14 @@ class _ScrollToTopButtonState extends State<ScrollToTopButton>
       begin: 0.0,
       end: 1.0,
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutBack));
+
+    _pulseController = AnimationController(
+      duration: const Duration(milliseconds: 1500),
+      vsync: this,
+    )..repeat(reverse: true);
+    _pulseAnimation = Tween<double>(begin: 1.0, end: 1.2).animate(
+      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
+    );
 
     widget.scrollController.addListener(_scrollListener);
   }
@@ -44,6 +54,7 @@ class _ScrollToTopButtonState extends State<ScrollToTopButton>
   void dispose() {
     widget.scrollController.removeListener(_scrollListener);
     _controller.dispose();
+    _pulseController.dispose();
     super.dispose();
   }
 
@@ -63,29 +74,34 @@ class _ScrollToTopButtonState extends State<ScrollToTopButton>
           );
         },
         backgroundColor: Colors.transparent,
-        child: Container(
-          width: 56,
-          height: 56,
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Colors.cyan, Colors.blue],
-            ),
-            shape: BoxShape.circle,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.cyan.withValues(alpha: 0.4),
-                blurRadius: 15,
-                spreadRadius: 2,
+        child: AnimatedBuilder(
+          animation: _pulseAnimation,
+          builder: (context, child) {
+            return Container(
+              width: 56,
+              height: 56,
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [Colors.cyan, Colors.blue],
+                ),
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.cyan.withValues(alpha: 0.4),
+                    blurRadius: 15 * _pulseAnimation.value,
+                    spreadRadius: 2 * _pulseAnimation.value,
+                  ),
+                ],
               ),
-            ],
-          ),
-          child: const Icon(
-            Icons.keyboard_arrow_up_rounded,
-            color: Colors.white,
-            size: 32,
-          ),
+              child: const Icon(
+                Icons.keyboard_arrow_up_rounded,
+                color: Colors.white,
+                size: 32,
+              ),
+            );
+          },
         ),
       ),
     );

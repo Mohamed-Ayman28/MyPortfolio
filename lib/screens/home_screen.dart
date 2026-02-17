@@ -5,6 +5,7 @@ import 'package:my_portfolio/widgets/animated_project_card.dart';
 import 'package:my_portfolio/widgets/animated_stat_card.dart';
 import 'package:my_portfolio/widgets/animated_timeline.dart';
 import 'package:my_portfolio/widgets/custom_card.dart';
+import 'package:my_portfolio/widgets/floating_particles.dart';
 import 'package:my_portfolio/widgets/scroll_to_top_button.dart';
 import 'package:my_portfolio/widgets/send_email.dart';
 import 'package:my_portfolio/widgets/typewriter_text.dart';
@@ -213,20 +214,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildNavButton(String text, VoidCallback onTap) {
-    return TextButton(
-      onPressed: onTap,
-      style: TextButton.styleFrom(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      ),
-      child: Text(
-        text,
-        style: const TextStyle(
-          color: Colors.white70,
-          fontWeight: FontWeight.w500,
-          fontSize: 14,
-        ),
-      ),
-    );
+    return _HoverNavButton(text: text, onTap: onTap);
   }
 
   Widget? _buildDrawer(List<GlobalKey> sectionKeys) {
@@ -297,26 +285,29 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   // ================= HERO SECTION =================
   Widget _buildHeroSection() {
-    return Container(
-      key: homeKey,
-      width: double.maxFinite,
-      padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 20),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            const Color(0xff0a0a0a),
-            const Color(0xff1a2a3a).withValues(alpha: 0.8),
-            const Color(0xff0a0a0a),
-          ],
+    return FloatingParticles(
+      particleCount: 25,
+      child: Container(
+        key: homeKey,
+        width: double.maxFinite,
+        padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 20),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              const Color(0xff0a0a0a),
+              const Color(0xff1a2a3a).withValues(alpha: 0.8),
+              const Color(0xff0a0a0a),
+            ],
+          ),
         ),
-      ),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          bool isMobile = constraints.maxWidth < 800;
-          return isMobile ? _buildMobileHero(constraints) : _buildDesktopHero();
-        },
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            bool isMobile = constraints.maxWidth < 800;
+            return isMobile ? _buildMobileHero(constraints) : _buildDesktopHero();
+          },
+        ),
       ),
     );
   }
@@ -1165,11 +1156,32 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           ),
           const SizedBox(height: 20),
           Text(
-            "© 2025 Mohamed Ayman. All rights reserved.",
+            "© 2026 Mohamed Ayman. All rights reserved.",
             style: TextStyle(
               color: Colors.white.withValues(alpha: 0.5),
               fontSize: 12,
             ),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.favorite,
+                color: Colors.red.withValues(alpha: 0.7),
+                size: 14,
+              ),
+              const SizedBox(width: 6),
+              Text(
+                "Built with Flutter",
+                style: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.4),
+                  fontSize: 11,
+                ),
+              ),
+              const SizedBox(width: 4),
+              const Icon(Icons.flutter_dash, color: Colors.cyan, size: 14),
+            ],
           ),
         ],
       ),
@@ -1177,19 +1189,113 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildSocialButton(String imagePath, String url) {
-    return GestureDetector(
+    return _HoverSocialButton(
+      imagePath: imagePath,
       onTap: () => _launchURL(url),
-      child: MouseRegion(
-        cursor: SystemMouseCursors.click,
+    );
+  }
+}
+
+// Enhanced Nav Button with hover effect
+class _HoverNavButton extends StatefulWidget {
+  final String text;
+  final VoidCallback onTap;
+
+  const _HoverNavButton({required this.text, required this.onTap});
+
+  @override
+  State<_HoverNavButton> createState() => _HoverNavButtonState();
+}
+
+class _HoverNavButtonState extends State<_HoverNavButton> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: _isHovered
+                ? Colors.cyan.withValues(alpha: 0.1)
+                : Colors.transparent,
+            border: Border.all(
+              color: _isHovered
+                  ? Colors.cyan.withValues(alpha: 0.5)
+                  : Colors.transparent,
+            ),
+          ),
+          child: Text(
+            widget.text,
+            style: TextStyle(
+              color: _isHovered ? Colors.cyan : Colors.white70,
+              fontWeight: FontWeight.w500,
+              fontSize: 14,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// Enhanced Social Button with glow effect
+class _HoverSocialButton extends StatefulWidget {
+  final String imagePath;
+  final VoidCallback onTap;
+
+  const _HoverSocialButton({required this.imagePath, required this.onTap});
+
+  @override
+  State<_HoverSocialButton> createState() => _HoverSocialButtonState();
+}
+
+class _HoverSocialButtonState extends State<_HoverSocialButton> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: widget.onTap,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           padding: const EdgeInsets.all(12),
+          transform: _isHovered
+              ? (Matrix4.identity()..scale(1.15))
+              : Matrix4.identity(),
+          transformAlignment: Alignment.center,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: const Color(0xff1a2a3a),
-            border: Border.all(color: Colors.cyan.withValues(alpha: 0.3)),
+            color: _isHovered
+                ? const Color(0xff2a4a5a)
+                : const Color(0xff1a2a3a),
+            border: Border.all(
+              color: _isHovered
+                  ? Colors.cyan
+                  : Colors.cyan.withValues(alpha: 0.3),
+              width: _isHovered ? 2 : 1,
+            ),
+            boxShadow: _isHovered
+                ? [
+                    BoxShadow(
+                      color: Colors.cyan.withValues(alpha: 0.5),
+                      blurRadius: 20,
+                      spreadRadius: 3,
+                    ),
+                  ]
+                : [],
           ),
-          child: Image.asset(imagePath, width: 36, height: 36),
+          child: Image.asset(widget.imagePath, width: 36, height: 36),
         ),
       ),
     );

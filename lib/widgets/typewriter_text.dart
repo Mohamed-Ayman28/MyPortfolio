@@ -83,18 +83,53 @@ class _TypewriterTextState extends State<TypewriterText> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(_displayText, style: widget.style),
-        AnimatedOpacity(
-          opacity: 1.0,
-          duration: const Duration(milliseconds: 500),
-          child: Text(
-            '|',
-            style: widget.style?.copyWith(
-              color: Colors.cyan,
-              fontWeight: FontWeight.w300,
-            ),
-          ),
-        ),
+        _BlinkingCursor(style: widget.style),
       ],
+    );
+  }
+}
+
+class _BlinkingCursor extends StatefulWidget {
+  final TextStyle? style;
+
+  const _BlinkingCursor({this.style});
+
+  @override
+  State<_BlinkingCursor> createState() => _BlinkingCursorState();
+}
+
+class _BlinkingCursorState extends State<_BlinkingCursor>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 600),
+      vsync: this,
+    )..repeat(reverse: true);
+    _animation = Tween<double>(begin: 0.0, end: 1.0).animate(_controller);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FadeTransition(
+      opacity: _animation,
+      child: Text(
+        '|',
+        style: widget.style?.copyWith(
+          color: Colors.cyan,
+          fontWeight: FontWeight.w300,
+        ),
+      ),
     );
   }
 }
