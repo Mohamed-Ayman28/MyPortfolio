@@ -305,7 +305,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         child: LayoutBuilder(
           builder: (context, constraints) {
             bool isMobile = constraints.maxWidth < 800;
-            return isMobile ? _buildMobileHero(constraints) : _buildDesktopHero();
+            return isMobile
+                ? _buildMobileHero(constraints)
+                : _buildDesktopHero();
           },
         ),
       ),
@@ -462,13 +464,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           () => _scrollToSection(projectsKey),
           isPrimary: false,
         ),
-        _buildGradientButton(
-          "Download CV",
-          Icons.download_rounded,
-          () => _launchURL("https://drive.google.com/your-cv-link"),
-          isPrimary: false,
-          isDownload: true,
-        ),
       ],
     );
   }
@@ -478,7 +473,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     IconData icon,
     VoidCallback onTap, {
     bool isPrimary = true,
-    bool isDownload = false,
   }) {
     return GestureDetector(
       onTap: onTap,
@@ -489,43 +483,22 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           borderRadius: BorderRadius.circular(30),
           gradient: isPrimary
               ? const LinearGradient(colors: [Colors.cyan, Colors.blue])
-              : isDownload
-              ? LinearGradient(
-                  colors: [
-                    Colors.green.withValues(alpha: 0.2),
-                    Colors.teal.withValues(alpha: 0.2),
-                  ],
-                )
               : null,
           border: Border.all(
             color: isPrimary
                 ? Colors.transparent
-                : isDownload
-                ? Colors.green.withValues(alpha: 0.5)
                 : Colors.cyan.withValues(alpha: 0.5),
           ),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              icon,
-              size: 18,
-              color: isPrimary
-                  ? Colors.white
-                  : isDownload
-                  ? Colors.green
-                  : Colors.cyan,
-            ),
+            Icon(icon, size: 18, color: isPrimary ? Colors.white : Colors.cyan),
             const SizedBox(width: 8),
             Text(
               text,
               style: TextStyle(
-                color: isPrimary
-                    ? Colors.white
-                    : isDownload
-                    ? Colors.green
-                    : Colors.cyan,
+                color: isPrimary ? Colors.white : Colors.cyan,
                 fontWeight: FontWeight.bold,
                 fontSize: 14,
               ),
@@ -547,7 +520,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           end: Alignment.bottomCenter,
           colors: [
             const Color(0xff0a0a0a),
-            const Color(0xff111111).withValues(alpha: 0.8),
+            const Color(0xff0d1520).withValues(alpha: 0.9),
+            const Color(0xff0a0a0a),
           ],
         ),
       ),
@@ -619,7 +593,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     return Container(
       key: aboutKey,
       width: double.infinity,
-      color: const Color(0xff111111),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            const Color(0xff0d1520),
+            const Color(0xff0a0a0a),
+            const Color(0xff0d1520).withValues(alpha: 0.8),
+          ],
+        ),
+      ),
       padding: const EdgeInsets.symmetric(vertical: 40),
       child: custom_card(
         image: "assets/images/myPhoto.jpg",
@@ -645,8 +629,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            const Color(0xff111111),
-            const Color(0xff0a0a0a).withValues(alpha: 0.9),
+            const Color(0xff0a0a0a),
+            const Color(0xff0d1520).withValues(alpha: 0.9),
+            const Color(0xff0a0a0a),
           ],
         ),
       ),
@@ -723,7 +708,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       key: educationKey,
       width: double.maxFinite,
       padding: const EdgeInsets.symmetric(vertical: 40),
-      color: const Color(0xff0a0a0a),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            const Color(0xff0d1520),
+            const Color(0xff0a0a0a),
+            const Color(0xff0d1520).withValues(alpha: 0.7),
+          ],
+        ),
+      ),
       child: custom_card(
         image: "assets/images/education.png",
         scetionTitle: "Education",
@@ -742,7 +737,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       key: skillsKey,
       width: double.maxFinite,
       padding: const EdgeInsets.symmetric(vertical: 40),
-      color: const Color(0xff111111),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            const Color(0xff0a0a0a),
+            const Color(0xff0d1520).withValues(alpha: 0.9),
+            const Color(0xff0a0a0a),
+          ],
+        ),
+      ),
       child: const custom_card(
         image: "assets/images/skill.png",
         scetionTitle: "Skills",
@@ -763,9 +768,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
+            const Color(0xff0d1520),
             const Color(0xff0a0a0a),
-            const Color(0xff1a2a3a).withValues(alpha: 0.5),
-            const Color(0xff0a0a0a),
+            const Color(0xff0d1520).withValues(alpha: 0.8),
           ],
         ),
       ),
@@ -911,7 +916,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       key: projectsKey,
       width: double.maxFinite,
       padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 0),
-      color: const Color(0xff0a0a0a),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            const Color(0xff0a0a0a),
+            const Color(0xff0d1520).withValues(alpha: 0.9),
+            const Color(0xff0a0a0a),
+          ],
+        ),
+      ),
       child: LayoutBuilder(
         builder: (context, constraints) {
           bool isMobile = constraints.maxWidth < 600;
@@ -966,11 +981,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       width: double.infinity,
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
           colors: [
+            const Color(0xff0d1520),
             const Color(0xff0a0a0a),
-            const Color(0xff1a2a3a).withValues(alpha: 0.8),
+            const Color(0xff0d1520).withValues(alpha: 0.8),
           ],
         ),
       ),
@@ -1113,7 +1129,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
           prefixIcon: maxLines == 1 ? Icon(icon, color: Colors.cyan) : null,
           filled: true,
-          fillColor: const Color(0xff1a2a3a),
+          fillColor: const Color(0xff0d1520),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(maxLines > 1 ? 20 : 30),
             borderSide: BorderSide.none,
@@ -1132,7 +1148,16 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     return Container(
       key: socialKey,
       padding: const EdgeInsets.symmetric(vertical: 30),
-      color: const Color(0xff0a0a0a),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            const Color(0xff0a0a0a),
+            const Color(0xff0d1520).withValues(alpha: 0.9),
+          ],
+        ),
+      ),
       child: Column(
         children: [
           Row(
