@@ -116,8 +116,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     if (context != null) {
       Scrollable.ensureVisible(
         context,
-        duration: const Duration(milliseconds: 600),
-        curve: Curves.easeInOut,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeOutCubic,
+        alignment: 0.0,
       );
     }
   }
@@ -273,9 +274,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   fontSize: 16,
                 ),
               ),
+              hoverColor: Colors.cyan.withValues(alpha: 0.1),
+              splashColor: Colors.cyan.withValues(alpha: 0.2),
               onTap: () {
                 Navigator.pop(context);
-                _scrollToSection(sectionKeys[i]);
+                Future.delayed(const Duration(milliseconds: 100), () {
+                  _scrollToSection(sectionKeys[i]);
+                });
               },
             ),
         ],
@@ -474,36 +479,45 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     VoidCallback onTap, {
     bool isPrimary = true,
   }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-        decoration: BoxDecoration(
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
           borderRadius: BorderRadius.circular(30),
-          gradient: isPrimary
-              ? const LinearGradient(colors: [Colors.cyan, Colors.blue])
-              : null,
-          border: Border.all(
-            color: isPrimary
-                ? Colors.transparent
-                : Colors.cyan.withValues(alpha: 0.5),
-          ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 18, color: isPrimary ? Colors.white : Colors.cyan),
-            const SizedBox(width: 8),
-            Text(
-              text,
-              style: TextStyle(
-                color: isPrimary ? Colors.white : Colors.cyan,
-                fontWeight: FontWeight.bold,
-                fontSize: 14,
+          splashColor: Colors.cyan.withValues(alpha: 0.3),
+          highlightColor: Colors.cyan.withValues(alpha: 0.1),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(30),
+              gradient: isPrimary
+                  ? const LinearGradient(colors: [Colors.cyan, Colors.blue])
+                  : null,
+              border: Border.all(
+                color: isPrimary
+                    ? Colors.transparent
+                    : Colors.cyan.withValues(alpha: 0.5),
               ),
             ),
-          ],
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(icon, size: 18, color: isPrimary ? Colors.white : Colors.cyan),
+                const SizedBox(width: 8),
+                Text(
+                  text,
+                  style: TextStyle(
+                    color: isPrimary ? Colors.white : Colors.cyan,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -1238,30 +1252,37 @@ class _HoverNavButtonState extends State<_HoverNavButton> {
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
+      cursor: SystemMouseCursors.click,
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
-      child: GestureDetector(
-        onTap: widget.onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: _isHovered
-                ? Colors.cyan.withValues(alpha: 0.1)
-                : Colors.transparent,
-            border: Border.all(
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: widget.onTap,
+          borderRadius: BorderRadius.circular(20),
+          splashColor: Colors.cyan.withValues(alpha: 0.3),
+          highlightColor: Colors.cyan.withValues(alpha: 0.1),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
               color: _isHovered
-                  ? Colors.cyan.withValues(alpha: 0.5)
+                  ? Colors.cyan.withValues(alpha: 0.1)
                   : Colors.transparent,
+              border: Border.all(
+                color: _isHovered
+                    ? Colors.cyan.withValues(alpha: 0.5)
+                    : Colors.transparent,
+              ),
             ),
-          ),
-          child: Text(
-            widget.text,
-            style: TextStyle(
-              color: _isHovered ? Colors.cyan : Colors.white70,
-              fontWeight: FontWeight.w500,
-              fontSize: 14,
+            child: Text(
+              widget.text,
+              style: TextStyle(
+                color: _isHovered ? Colors.cyan : Colors.white70,
+                fontWeight: FontWeight.w500,
+                fontSize: 14,
+              ),
             ),
           ),
         ),
@@ -1290,37 +1311,42 @@ class _HoverSocialButtonState extends State<_HoverSocialButton> {
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
       cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: widget.onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          padding: const EdgeInsets.all(12),
-          transform: _isHovered
-              ? (Matrix4.identity()..scale(1.15))
-              : Matrix4.identity(),
-          transformAlignment: Alignment.center,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: _isHovered
-                ? const Color(0xff2a4a5a)
-                : const Color(0xff1a2a3a),
-            border: Border.all(
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: widget.onTap,
+          borderRadius: BorderRadius.circular(50),
+          splashColor: Colors.cyan.withValues(alpha: 0.3),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            padding: const EdgeInsets.all(12),
+            transform: _isHovered
+                ? (Matrix4.identity()..scale(1.15))
+                : Matrix4.identity(),
+            transformAlignment: Alignment.center,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
               color: _isHovered
-                  ? Colors.cyan
-                  : Colors.cyan.withValues(alpha: 0.3),
-              width: _isHovered ? 2 : 1,
+                  ? const Color(0xff2a4a5a)
+                  : const Color(0xff1a2a3a),
+              border: Border.all(
+                color: _isHovered
+                    ? Colors.cyan
+                    : Colors.cyan.withValues(alpha: 0.3),
+                width: _isHovered ? 2 : 1,
+              ),
+              boxShadow: _isHovered
+                  ? [
+                      BoxShadow(
+                        color: Colors.cyan.withValues(alpha: 0.5),
+                        blurRadius: 20,
+                        spreadRadius: 3,
+                      ),
+                    ]
+                  : [],
             ),
-            boxShadow: _isHovered
-                ? [
-                    BoxShadow(
-                      color: Colors.cyan.withValues(alpha: 0.5),
-                      blurRadius: 20,
-                      spreadRadius: 3,
-                    ),
-                  ]
-                : [],
+            child: Image.asset(widget.imagePath, width: 36, height: 36),
           ),
-          child: Image.asset(widget.imagePath, width: 36, height: 36),
         ),
       ),
     );
