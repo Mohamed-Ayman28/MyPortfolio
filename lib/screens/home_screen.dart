@@ -6,8 +6,12 @@ import 'package:my_portfolio/widgets/animated_stat_card.dart';
 import 'package:my_portfolio/widgets/animated_timeline.dart';
 import 'package:my_portfolio/widgets/custom_card.dart';
 import 'package:my_portfolio/widgets/floating_particles.dart';
-import 'package:my_portfolio/widgets/scroll_to_top_button.dart';
+import 'package:my_portfolio/widgets/section_divider.dart';
 import 'package:my_portfolio/widgets/send_email.dart';
+import 'package:my_portfolio/widgets/services_section.dart';
+import 'package:my_portfolio/widgets/skills_section.dart';
+import 'package:my_portfolio/widgets/speed_dial_fab.dart';
+import 'package:my_portfolio/widgets/testimonials_section.dart';
 import 'package:my_portfolio/widgets/typewriter_text.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -27,10 +31,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   final homeKey = GlobalKey();
   final aboutKey = GlobalKey();
+  final servicesKey = GlobalKey();
   final educationKey = GlobalKey();
   final skillsKey = GlobalKey();
   final certificatesKey = GlobalKey();
   final projectsKey = GlobalKey();
+  final testimonialsKey = GlobalKey();
   final contactKey = GlobalKey();
   final socialKey = GlobalKey();
 
@@ -128,12 +134,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     final List<GlobalKey> sectionKeys = [
       homeKey,
       aboutKey,
+      servicesKey,
       educationKey,
       skillsKey,
       certificatesKey,
       projectsKey,
+      testimonialsKey,
       contactKey,
-      socialKey,
     ];
 
     return Scaffold(
@@ -142,7 +149,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           ? _buildDrawer(sectionKeys)
           : null,
       backgroundColor: const Color(0xff0a0a0a),
-      floatingActionButton: ScrollToTopButton(
+      floatingActionButton: SpeedDialFab(
         scrollController: _scrollController,
       ),
       body: FadeTransition(
@@ -154,13 +161,25 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             scrollDirection: Axis.vertical,
             children: [
               _buildHeroSection(),
+              const SectionDivider(),
               _buildStatsSection(),
+              const SectionDivider(),
               _buildAboutSection(),
+              const SectionDivider(),
+              ServicesSection(sectionKey: servicesKey),
+              const SectionDivider(),
               _buildTimelineSection(),
+              const SectionDivider(),
               _buildEducationSection(),
+              const SectionDivider(),
               _buildSkillsSection(),
+              const SectionDivider(),
               _buildCertificatesSection(),
+              const SectionDivider(),
               _buildProjectsSection(),
+              const SectionDivider(),
+              TestimonialsSection(sectionKey: testimonialsKey),
+              const SectionDivider(),
               _buildContactSection(),
               _buildSocialSection(),
             ],
@@ -505,7 +524,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(icon, size: 18, color: isPrimary ? Colors.white : Colors.cyan),
+                Icon(
+                  icon,
+                  size: 18,
+                  color: isPrimary ? Colors.white : Colors.cyan,
+                ),
                 const SizedBox(width: 8),
                 Text(
                   text,
@@ -747,28 +770,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   // ================= SKILLS SECTION =================
   Widget _buildSkillsSection() {
-    return Container(
-      key: skillsKey,
-      width: double.maxFinite,
-      padding: const EdgeInsets.symmetric(vertical: 40),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            const Color(0xff0a0a0a),
-            const Color(0xff0d1520).withValues(alpha: 0.9),
-            const Color(0xff0a0a0a),
-          ],
-        ),
-      ),
-      child: const custom_card(
-        image: "assets/images/skill.png",
-        scetionTitle: "Skills",
-        subTitle: "my skills",
-        content: "",
-      ),
-    );
+    return SkillsSection(sectionKey: skillsKey);
   }
 
   // ================= CERTIFICATES SECTION =================

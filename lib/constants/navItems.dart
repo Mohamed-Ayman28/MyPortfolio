@@ -1,9 +1,11 @@
 List<String> pages = [
   "Home",
   "About Me",
+  "Services",
   "Education",
   "Skills",
-  "Certifcates",
+  "Certificates",
   "Projects",
+  "Testimonials",
   "Contact Me",
 ];
